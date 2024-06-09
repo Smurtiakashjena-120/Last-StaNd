@@ -59,8 +59,9 @@ createBase.addEventListener("click",()=>{
 
 function backGroundDesign(){
 
+    //line
     c.beginPath();
-    c.moveTo(0, canvasHeight - 2 * blockHeight); // Start point
+    c.moveTo(0, canvasHeight - 2 * blockHeight -10); // Start point
     c.lineTo(canvasWidth, canvasHeight - 2 * blockHeight - 10); // End point
     c.strokeStyle = "white"; // Line color
     c.lineWidth = 0.1; // Line width
@@ -103,7 +104,34 @@ function backGroundDesign(){
           c.fillStyle = "whitesmoke";
           c.fill();
 
+ // trees
+ let yTree=canvasHeight - 2 * blockHeight - 95;
 
+ const treeImage = new Image();
+ treeImage.src = './assets/tree.png';
+ const treeSelf = this;
+ this.height=95
+ this.width=80
+ treeImage.onload = () => {
+     // Draw the image only after it has loaded
+     treeSelf.draw();
+ };
+ c.drawImage(treeImage,-15,yTree, treeSelf.width,treeSelf.height);
+ c.drawImage(treeImage,canvasWidth/3,yTree, treeSelf.width,treeSelf.height);
+ c.drawImage(treeImage,canvasWidth *( 2/3),yTree, treeSelf.width,treeSelf.height);
+ c.drawImage(treeImage,canvasWidth - 90,yTree, treeSelf.width,treeSelf.height);
+
+  // laptop
+  const lapImage = new Image();
+  lapImage.src = './assets/laptop.png';
+  const lapSelf = this;
+  this.height=150
+  this.width=180
+  lapImage.onload = () => {
+      // Draw the image only after it has loaded
+      lapSelf.draw();
+  };
+  c.drawImage(lapImage,canvasWidth/2 -100,canvasHeight - self.height -10, lapSelf.width,lapSelf.height);
 
 
 
@@ -489,13 +517,13 @@ function Jombie() {
    //idea to increase speed with time interval
    let speedX;
    if(Score >300){
-    speedX = 1.3
+    speedX = 1.5
    }else if(Score > 200){
-    speedX =.9
+    speedX =1
    } else if(Score >100){
     speedX=.7
    }else{
-    speedX=0.6
+    speedX=0.5
    }
 
 
