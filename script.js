@@ -299,6 +299,11 @@ const blockArray=[];
 
 
 function Block(x,y,color){
+
+        // Load the image
+        const image = new Image();
+        image.src = './assets/brickWall.jpeg';
+        const self = this;
     const gravity=0.005;
     this.x=x;
     this.y=y;
@@ -310,9 +315,13 @@ function Block(x,y,color){
         y:0
     }
 
+    image.onload = () => {
+        // Draw the image only after it has loaded
+        self.draw();
+    };
+
     this.draw=function(){
-        c.fillStyle=this.color
-        c.fillRect(this.x,this.y,this.width,this.height);
+        c.drawImage(image, self.x, self.y, self.width, self.height);
     }
     this.update=function(){
 
@@ -480,13 +489,13 @@ function Jombie() {
    //idea to increase speed with time interval
    let speedX;
    if(Score >300){
-    speedX = 1.5
+    speedX = 1.3
    }else if(Score > 200){
-    speedX =1
+    speedX =.9
    } else if(Score >100){
     speedX=.7
    }else{
-    speedX=0.5
+    speedX=0.6
    }
 
 
@@ -679,7 +688,7 @@ function drawHealthLabel() {
     c.textAlign = 'left';
     c.textBaseline = 'middle'; 
     c.fillStyle = 'white';
-    c.fillText('Health', labelXPos, labelYPos);
+    c.fillText(`Health : ${healthArr.length} / 10 `, labelXPos, labelYPos);
 }
 
 
