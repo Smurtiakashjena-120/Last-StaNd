@@ -1,0 +1,26 @@
+body{
+    background-color: rgb(89, 144, 144);
+}
+
+canvas{
+    border: 2px solid rgb(58, 58, 58);
+    border-bottom: 19px solid green  ;
+    background-color: black;
+    
+}
+
+button{
+    margin: 5px;
+
+}
+.startGame{
+    display: flex;
+    justify-content: end;
+}
+.unclickble{
+    pointer-events: none;
+}
+
+.hidden {
+    display: none;
+}
