@@ -55,6 +55,74 @@ createBase.addEventListener("click",()=>{
     createBase.remove();
 
 })
+//design for backGround 
+
+function backGroundDesign(){
+
+    c.beginPath();
+    c.moveTo(0, canvasHeight - 2 * blockHeight); // Start point
+    c.lineTo(canvasWidth, canvasHeight - 2 * blockHeight - 10); // End point
+    c.strokeStyle = "white"; // Line color
+    c.lineWidth = 0.1; // Line width
+    c.stroke(); // Draw the line
+
+
+//moon
+    const image = new Image();
+    image.src = './assets/moon.jpeg';
+    const self = this;
+    this.height=100
+    this.width=130
+    image.onload = () => {
+        // Draw the image only after it has loaded
+        self.draw();
+    };
+    c.drawImage(image,0,0, self.width,self.height);
+//clouds
+   const cloudimage = new Image();
+    cloudimage.src = './assets/cloud.png';
+    const cloudThis = this;
+    this.height=80
+    this.width=100
+    cloudimage.onload = () => {
+        // Draw the image only after it has loaded
+        self.draw();
+    };
+    c.drawImage(cloudimage,canvasWidth/4,5, cloudThis.width,cloudThis.height);
+    c.drawImage(cloudimage,canvasWidth* (3/5),canvasHeight/5, cloudThis.width,cloudThis.height);
+
+
+
+    //stars
+  
+        let radius= Math.random() * 3
+        let x= Math.random() * canvasWidth;
+        let y = Math.random() * canvasHeight / 3 +20
+          c.beginPath();
+          c.arc(x,y,radius, 0, 2 * Math.PI);
+          c.fillStyle = "whitesmoke";
+          c.fill();
+
+
+
+
+
+    
+}
+
+
+// Function to show the score
+let Score=0;
+let jombieCount=0;
+function showScore() {
+    const labelXPos = canvasWidth - canvasWidth / 3;
+    const labelYPos = canvasHeight / 8 - 30; 
+    c.font = '16px Arial'; 
+    c.textAlign = 'left';
+    c.textBaseline = 'middle'; 
+    c.fillStyle = 'white';
+    c.fillText(`Score : ${Score}`, labelXPos, labelYPos);
+}
 
 
 
@@ -306,14 +374,14 @@ function Particle(x,y,color){
 
 function placeInitialBlocks() {
     
-    let colorArr=["brown","bisque","cadetblue"]
+
     let postionArr=[
-        {x:startPlayerZone, y :(canvasHeight -  blockHeight),color:"brown"},
-        {x:startPlayerZone -blockWidth, y :(canvasHeight -  2 * blockHeight),color:"bisque"},
-        {x:startPlayerZone-blockWidth, y :(canvasHeight  -  blockHeight),color:"cadetblue"},
-        {x:endPlayerZone - blockWidth, y :(canvasHeight -  blockHeight),color:"bisque"},
-        {x:endPlayerZone - blockWidth/2, y :(canvasHeight -  2 * blockHeight),color:"cadetblue"},
-        {x:endPlayerZone, y :(canvasHeight -  blockHeight),color:"brown"},
+        {x:startPlayerZone, y :(canvasHeight -  blockHeight),color:"#AA4A44"},
+        {x:startPlayerZone -blockWidth, y :(canvasHeight -  2 * blockHeight),color:" #B22222 "},
+        {x:startPlayerZone-blockWidth, y :(canvasHeight  -  blockHeight),color:"#BC4A3C"},
+        {x:endPlayerZone - blockWidth, y :(canvasHeight -  blockHeight),color:" #B22222 "},
+        {x:endPlayerZone - blockWidth/2, y :(canvasHeight -  2 * blockHeight),color:"#BC4A3C"},
+        {x:endPlayerZone, y :(canvasHeight -  blockHeight),color:"#AA4A44"},
     ]
     postionArr.forEach( block => {
         let newBlock=new Block(block.x,block.y,block.color);
@@ -409,8 +477,21 @@ function Jombie() {
 
     this.x = x;
     this.y = y;
+   //idea to increase speed with time interval
+   let speedX;
+   if(Score >300){
+    speedX = 1.5
+   }else if(Score > 200){
+    speedX =1
+   } else if(Score >100){
+    speedX=.7
+   }else{
+    speedX=0.5
+   }
+
+
     this.velocity = {
-        x: 0.5,
+        x: speedX,
         y: 0,
     };
     this.height = height;
@@ -468,7 +549,10 @@ function collisionCheckBullet(bullet, jombie, jombieIndex, bulletIndex) {
         for(let i=0 ; i< 20 ; i++){
             let newParticle = new Particle(bullet.x , bullet.y + bullet.size ,jombie.color)
             parcticleArray.push(newParticle);
-        }    
+        } 
+        //updating scoree   
+        Score += 10;
+        jombieCount++;
         jombieArray.splice(jombieIndex, 1);
         bulletArray.splice(bulletIndex, 1);
     }
@@ -520,6 +604,9 @@ function checkDownBlock(block,jombieIndex,jombie) {
             parcticleArray.push(newParticle);
         }
         jombieArray.splice(jombieIndex,1);
+        //updating score
+        jombieCount++;
+        Score +=5;
         block.velocity.y = 0.1;
     }
 
@@ -535,6 +622,9 @@ function collisionCheckSurviver(surviver,jombie, jombieIndex) {
             let newParticle = new Particle(jombie.x + jombie.width , jombie.y + jombie.height/2 ,jombie.color)
             parcticleArray.push(newParticle);
         }
+        //updating score
+        Score += 15 ;
+        jombieCount++;
         jombieArray.splice(jombieIndex,1);
         healthArr.pop()
 
@@ -548,12 +638,11 @@ function collisionCheckSurviver(surviver,jombie, jombieIndex) {
 
 function PlayerHealth(x,y,color){
    
-    this.height=8;
+    this.height=10;
     this.width=10;
     this.x=x;
     this.y=y;
     this.color=color
-
 
     this.draw=function (){
         c.fillStyle=this.color
@@ -566,31 +655,49 @@ function PlayerHealth(x,y,color){
 }
 //showing health on screen
 const healthArr = [];
+
 function showHealth(){
-    const width=10;
-    const height=8;
+
+     const width=10;
+     const height=10;
      let xPos = canvasWidth - canvasWidth/6;
      let yPos =   canvasHeight / 8;
 
-
-     for(let i=0;i<8;i++){
-        let color = i < 3 ? "orange" : "lightgreen"
+     for(let i=0;i<10;i++){
+      let color = i < 3 ? "orange" : "lightgreen"
       let newHealth=new PlayerHealth((xPos + i * width),yPos,color);
       healthArr.push(newHealth);
          
      }
 
 }
+// Function to draw the health label
+function drawHealthLabel() {
+    const labelXPos = canvasWidth - canvasWidth / 6;
+    const labelYPos = canvasHeight / 8 - 30; 
+    c.font = '16px Arial'; 
+    c.textAlign = 'left';
+    c.textBaseline = 'middle'; 
+    c.fillStyle = 'white';
+    c.fillText('Health', labelXPos, labelYPos);
+}
+
+
 
 // Animation Loop
-function animate() {
+function animate() { 
+
     animationID = requestAnimationFrame(animate);
 
     if (gamePaused) return;
  
     c.clearRect(0, 0, canvas.width, canvas.height);
+   
+   backGroundDesign();
     createGun();
     bheem.update()
+    drawHealthLabel();
+    showScore()
     
   
 
@@ -658,10 +765,45 @@ parcticleArray.forEach((particle , index) => {
 //
 healthArr.forEach(health => {
     health.update()
-})    
+})  
+
+if((healthArr.length == 0) && Score){
+    gameOver();
+}
 }
 
+let gameOverContainer=document.querySelector(".gameOver");
+let gameOverParent=document.querySelector(".gameOverParent");
+// let gameContainer=document.querySelector(".gameContainer");   => defined above
 
+
+function gameOver(){
+
+  gameContainer.classList.add("hidden")
+   gameOverParent.classList.remove("hidden");
+
+    let score= document.createElement("p");
+    score.innerText = `Your Score is : ${Score}`
+    let jombieKilled = document.createElement("p");
+    jombieKilled.innerText = `You have killed a total ${jombieCount} jombies !!`
+    
+     let newGame =document.createElement("button");
+     newGame.innerText =" Let's Have a New Game "
+
+     gameOverContainer.appendChild(score);
+     gameOverContainer.appendChild(jombieKilled);
+     gameOverContainer.appendChild(newGame);
+
+     //clearing both frames
+     clearInterval(intervalID)
+     cancelAnimationFrame(animationID);
+
+
+   newGame.addEventListener("click",()=>{
+    location.reload();
+   })
+
+}
 
 
 animate();

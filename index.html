@@ -4,24 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task2</title>
-    <link rel="styleSheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="startGame">
-        <!-- <button id="startGame">Start</button> -->
-        <button id="createBase">createBase</button>
+        <button id="createBase">Create Base</button>
         <button id="handlePlay">Pause</button>
         <button id="startGame">Start Game</button>
-        
     </div>
     <div class="gameContainer">
-    <canvas></canvas>
-    <div style=" display: flex; justify-content: center;">
-        <button id="leftKey">Left</button>
-        <button id="rightKey">Right</button>
+        <canvas></canvas>
+        <div style="display: flex; justify-content: center;">
+            <button id="leftKey">Left</button>
+            <button id="rightKey">Right</button>
+        </div>
     </div>
-</div>
-    
+    <div class="gameOverParent hidden" >
+        <div class="gameOver " style="display: flex; justify-content: center; align-items: center;">
+            <h2><i>Game Over</i></h2>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
