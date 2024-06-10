@@ -272,10 +272,10 @@ const rightKey =document.querySelector("#rightKey");
 const jumpKey =document.querySelector("#jump");
 
 //adding keyBased movment for ease in PC
-document.addEventListener('keydown', handleKeyPress);
+document.addEventListener('keydown', handleKeyPressed);
 let collision;
 
-function handleKeyPress(event) {
+function handleKeyPressed(event) {
     switch (event.key) {
       case 'ArrowUp':
         if(bheem.y + bheem.height < canvasHeight) return;
@@ -418,8 +418,6 @@ this.update=function(){
         }
 
     }
-
-    
    
 
  this.draw();
@@ -469,7 +467,6 @@ else{
 
 
 }
-
 
 
 
@@ -723,6 +720,26 @@ function checkDownBlock(block,jombieIndex,jombie) {
     }
 
 }
+//function to move block down if its in air
+function checkFlyingBlock(block) {
+    
+    let moveFlag=true;
+    blockArray.forEach((item) => {
+        if ((item.x + item.width > block.x && 
+            item.x < block.x + block.width && 
+            item.y  > block.y)){
+                moveFlag=false;
+                
+            }
+    })
+
+    if(moveFlag){
+
+        //giving a velocity to block
+        block.velocity.y = 0.5;
+    }
+
+}
 
 
 
@@ -872,6 +889,11 @@ parcticleArray.forEach((particle , index) => {
     //adding blocks 
     blockArray.forEach(block => {
         block.update();
+    })
+    //checking if block can move down
+
+    blockArray.forEach(block => {
+        checkFlyingBlock(block);
     })
 
 //
