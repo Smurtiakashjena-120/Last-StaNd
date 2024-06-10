@@ -8,15 +8,20 @@
 </head>
 <body>
     <div class="startGame">
-        <button id="createBase">Create Base</button>
+        <button id="addBlock">Add Block</button>
         <button id="handlePlay">Pause</button>
         <button id="startGame">Start Game</button>
     </div>
     <div class="gameContainer">
-        <canvas></canvas>
+        <div class="canvasDiv">
+            <canvas></canvas>
+        </div>
+
         <div style="display: flex; justify-content: center;">
             <button id="leftKey">Left</button>
+            <button id="jump">Jump</button>
             <button id="rightKey">Right</button>
+            
         </div>
     </div>
     <div class="gameOverParent hidden" >

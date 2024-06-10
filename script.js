@@ -13,7 +13,8 @@ const c = canvas.getContext("2d");
 let pauseBtn=document.querySelector("#handlePlay");
 let startGame=document.querySelector("#startGame");
 let gameContainer=document.querySelector(".gameContainer");
-let createBase=document.querySelector("#createBase");
+let canvasDiv=document.querySelector(".canvasDiv");
+
 
 
 let gamePaused = false ;
@@ -21,13 +22,14 @@ let gamePaused = false ;
 
 window.onload =()=>{
     pauseBtn.classList.add("hidden");
-    gameContainer.classList.add("unclickble")
+    canvasDiv.classList.add("unclickble")
 
 }
 
 startGame.addEventListener("click" , () => {
     pauseBtn.classList.remove("hidden");
-    gameContainer.classList.remove("unclickble")
+    addBlock.remove()
+    canvasDiv.classList.remove("unclickble")
     createJombie();
     startGame.remove();
 })
@@ -50,11 +52,6 @@ pauseBtn.addEventListener('click', () => {
     }
 });
 
-createBase.addEventListener("click",()=>{
-    placeInitialBlocks();
-    createBase.remove();
-
-})
 //design for backGround 
 
 function backGroundDesign(){
@@ -95,14 +92,17 @@ function backGroundDesign(){
 
 
     //stars
-  
-        let radius= Math.random() * 3
-        let x= Math.random() * canvasWidth;
-        let y = Math.random() * canvasHeight / 3 +20
-          c.beginPath();
-          c.arc(x,y,radius, 0, 2 * Math.PI);
-          c.fillStyle = "whitesmoke";
-          c.fill();
+  for(let i=0 ; i< 2 ; i++){
+    let radius= Math.random() * 3
+    let x= Math.random() * canvasWidth;
+    let y = Math.random() * canvasHeight / 2
+      c.beginPath();
+      c.arc(x,y,radius, 0, 2 * Math.PI);
+      c.fillStyle = "whitesmoke";
+      c.fill();
+
+  }
+
 
  // trees
  let yTree=canvasHeight - 2 * blockHeight - 95;
@@ -151,6 +151,7 @@ function showScore() {
     c.fillStyle = 'white';
     c.fillText(`Score : ${Score}`, labelXPos, labelYPos);
 }
+
 
 
 
@@ -268,16 +269,62 @@ const bheem= new Charector();
 
 const leftKey =document.querySelector("#leftKey");
 const rightKey =document.querySelector("#rightKey");
+const jumpKey =document.querySelector("#jump");
 
+//adding keyBased movment for ease in PC
+document.addEventListener('keydown', handleKeyPress);
+let collision;
 
-document.addEventListener("keydown",() => {
-    if (event.keyCode === 32){
+function handleKeyPress(event) {
+    switch (event.key) {
+      case 'ArrowUp':
         if(bheem.y + bheem.height < canvasHeight) return;
         bheem.velocity.y = 0;
         bheem.velocity.y = -2   ;
+        break;
+      case 'ArrowLeft':
+        collision = false
+        blockArray.forEach(block => {
+            if((bheem.x - 5 < block.x + block.width && bheem.x > block.x + block.width) &&
+            (bheem.y + bheem.height > block.y && bheem.y < block.y + block.height)){
+                collision = true;
+                
+            }
+        })
+        if(!collision   && (bheem.x - 5 > 0)){
+            bheem.x -= 5
+        }
+        break;
+      case 'ArrowRight':
+        collision = false
+        blockArray.forEach(block => {
+            if((bheem.x + bheem.width + 5 > block.x && bheem.x < block.x + block.width) &&
+            (bheem.y + bheem.height > block.y && bheem.y < block.y + block.height) ){
+                collision = true;
+                
+            }
+        })
+    
+        if(!collision && (bheem.x + bheem.width + 5 < canvasWidth)){
+            bheem.x += 5
+        }
+        break;
+      default:
+        return;
     }
+  }
 
- 
+
+
+
+
+///if played in mobile.. added button fetures also
+
+jumpKey.addEventListener("click",() => {
+
+        if(bheem.y + bheem.height < canvasHeight) return;
+        bheem.velocity.y = 0;
+        bheem.velocity.y = -2   ;
 
 })
 
@@ -321,60 +368,113 @@ const startPlayerZone = canvasWidth / 3;
 const endPlayerZone = canvasWidth * ( 2/3 );
 const blockWidth=100;
 const blockHeight=canvasHeight/4 - 10;
-
 const blockArray=[];
 
 
 
-function Block(x,y,color){
-
-        // Load the image
-        const image = new Image();
-        image.src = './assets/brickWall.jpeg';
-        const self = this;
-    const gravity=0.005;
-    this.x=x;
-    this.y=y;
-    this.height=blockHeight;
-    this.width=blockWidth;
-    this.color=color
-    this.velocity={
-        x:0,
-        y:0
-    }
-
-    image.onload = () => {
-        // Draw the image only after it has loaded
-        self.draw();
-    };
-
-    this.draw=function(){
-        c.drawImage(image, self.x, self.y, self.width, self.height);
-    }
-    this.update=function(){
-
-        
-
-        if((this.velocity.y)){
-            if( (this.y + this.height + this.velocity.y < canvas.height)){
-            
-                this.y += this.velocity.y;
-                this.velocity.y += gravity
-            }
-            else{
-                this.y = canvasHeight - this.height;
-                this.velocity.y =0;
-            }
-
-        }
-       
-
-     this.draw();
-    }
-
-}   
+ 
 //declaring particles to add jombie remove effect
 const parcticleArray = [];
+  
+//adding blocks for barrier
+function Block(x,y,color){
+
+    // Load the image
+    const image = new Image();
+    image.src = './assets/brickWall.jpeg';
+    const self = this;
+const gravity=0.005;
+this.x=x;
+this.y=y;
+this.height=blockHeight;
+this.width=blockWidth;
+this.color=color
+this.velocity={
+    x:0,
+    y:0
+}
+
+image.onload = () => {
+    // Draw the image only after it has loaded
+    self.draw();
+};
+
+this.draw=function(){
+    c.drawImage(image, self.x, self.y, self.width, self.height);
+}
+this.update=function(){
+
+    
+
+    if((this.velocity.y)){
+        if( (this.y + this.height + this.velocity.y < canvas.height)){
+        
+            this.y += this.velocity.y;
+            this.velocity.y += gravity
+        }
+        else{
+            this.y = canvasHeight - this.height;
+            this.velocity.y =0;
+        }
+
+    }
+
+    
+   
+
+ this.draw();
+}
+
+}  
+//button for adding block
+let addBlock = document.querySelector("#addBlock");
+addBlock.addEventListener("click",placeInitialBlocks)
+
+
+
+function placeInitialBlocks() {
+    let placeFlag =true
+
+ if(blockArray.length >= 6){
+    alert("You can Maximum place 6 blocks");
+    return;
+ }   
+  
+    
+if(blockArray.length){
+blockArray.forEach(block => {
+if(bheem.x < block.x + block.width && 
+    bheem.x + blockWidth > block.x &&
+    bheem.y > block.y
+){
+    placeFlag = false;
+}
+})
+}
+
+if(!placeFlag){
+    alert("No sufficient Place , please select other place")
+}
+else{
+
+    if(bheem.y < canvasHeight/2 - 20){
+        alert("you can place only 2 block in a coloumn")
+        return
+    }
+
+    let newBlock=new Block(bheem.x,bheem.y ,"brown");
+    blockArray.push(newBlock)
+    bheem.y =bheem.y - bheem.height  ;
+}
+
+
+}
+
+
+
+
+
+
 function Particle(x,y,color){
     const gravity=0.01;
     this.x=x;
@@ -404,32 +504,7 @@ function Particle(x,y,color){
     this.draw();
     }
 
-}   
-
-
-
-
-function placeInitialBlocks() {
-    
-
-    let postionArr=[
-        {x:startPlayerZone, y :(canvasHeight -  blockHeight),color:"#AA4A44"},
-        {x:startPlayerZone -blockWidth, y :(canvasHeight -  2 * blockHeight),color:" #B22222 "},
-        {x:startPlayerZone-blockWidth, y :(canvasHeight  -  blockHeight),color:"#BC4A3C"},
-        {x:endPlayerZone - blockWidth, y :(canvasHeight -  blockHeight),color:" #B22222 "},
-        {x:endPlayerZone - blockWidth/2, y :(canvasHeight -  2 * blockHeight),color:"#BC4A3C"},
-        {x:endPlayerZone, y :(canvasHeight -  blockHeight),color:"#AA4A44"},
-    ]
-    postionArr.forEach( block => {
-        let newBlock=new Block(block.x,block.y,block.color);
-        blockArray.push(newBlock)
-    })
-
-
-}
-
-
-
+} 
 
 // Creating bullet
 function Bullet(direction) {
