@@ -10,24 +10,132 @@ let canvasWidth = canvas.width;
 const c = canvas.getContext("2d");
 
 //accesing game start stop related buttons and adding logic
-let pauseBtn=document.querySelector("#handlePlay");
-let startGame=document.querySelector("#startGame");
+
 let gameContainer=document.querySelector(".gameContainer");
 let canvasDiv=document.querySelector(".canvasDiv");
 
+let startGame=document.querySelector("#startGame");
 
+
+
+// walking animationg
+
+const IdleArray = [];
+const runArray = [];
+const jumpArray = [];
+const dinoRunArray = [];
+let  idleImagesLoaded = 0;
+let  runImagesLoaded = 0;
+let  jumpImagesLoaded = 0;
+let  dinoRunLoaded = 0;
+const totalIdleImage = 10;
+const totalRunImage = 8;
+const totalJumpImage = 10;
+const totalDinoRunImage = 8;
+let runFlag=false;
+let idleFlag = false;
+let jumpFlag = false;
+let dinoRunFlag = false;
+
+
+
+// Load images
+for (let i = 1; i <= totalIdleImage; i++) {
+    let idleState = new Image();
+    idleState.src = `./assets/Idle (${i}).png`;
+    idleState.onload = () => {
+        idleImagesLoaded++;
+        if (idleImagesLoaded === totalIdleImage) {
+      idleFlag=true;
+      checkIfAllImagesLoaded();
+        }
+    };
+    IdleArray.push(idleState);
+}
+for (let i = 1; i <= totalJumpImage; i++) {
+    let jumpState = new Image();
+    jumpState.src = `./assets/Jump (${i}).png`;
+    jumpState.onload = () => {
+        jumpImagesLoaded++;
+        if (jumpImagesLoaded === totalJumpImage) {
+      jumpFlag=true;
+      checkIfAllImagesLoaded();
+        }
+    };
+    jumpArray.push(jumpState);
+}
+for (let i = 1; i <= totalRunImage; i++) {
+    let runState = new Image();
+    runState.src = `./assets/Run (${i}).png`;
+    runState.onload = () => {
+        runImagesLoaded++;
+        if (runImagesLoaded === totalRunImage) {
+      runFlag = true;
+      checkIfAllImagesLoaded();
+        }
+    };
+    runArray.push(runState);
+}
+for (let i = 1; i <= totalDinoRunImage; i++) {
+    let runState = new Image();
+    runState.src = `./assets/dinoRun (${i}).png`;
+    runState.onload = () => {
+        dinoRunLoaded++;
+        if (dinoRunLoaded === totalDinoRunImage) {
+      dinoRunFlag = true;
+      checkIfAllImagesLoaded();
+        }
+    };
+    dinoRunArray.push(runState);
+}
+
+
+
+
+let bheem;
+function checkIfAllImagesLoaded() {
+    if (runFlag && idleFlag && jumpFlag && dinoRunFlag) {
+        bheem= new Charector();
+        animate();
+        showHealth();
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+let pauseBtn=document.querySelector("#handlePlay");
 
 let gamePaused = false ;
 
 
 window.onload =()=>{
-    pauseBtn.classList.add("hidden");
+
     canvasDiv.classList.add("unclickble")
+    RateFire.classList.add("hidden");
+    mediKit.classList.add("hidden");
+    gunTypeBtn.classList.add("hidden")
+    reLoad.classList.add("hidden")
+    bulletShow.classList.add("hidden");
 
 }
 
 startGame.addEventListener("click" , () => {
-    pauseBtn.classList.remove("hidden");
+
+    pauseBtn.innerHTML =pauseSvg
+    RateFire.classList.remove("hidden");
+    mediKit.classList.remove("hidden");
+    gunTypeBtn.classList.remove("hidden")
+    reLoad.classList.remove("hidden")
+    bulletShow.classList.remove("hidden");
     addBlock.remove()
     canvasDiv.classList.remove("unclickble")
     createJombie();
@@ -35,9 +143,18 @@ startGame.addEventListener("click" , () => {
 })
 
 
+const pauseSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+</svg>`
+const playSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+</svg>
+`
+
+
 pauseBtn.addEventListener('click', () => {
-    gamePaused = !gamePaused; // Toggle the gamePaused variable
-    pauseBtn.innerText = gamePaused ? "Resume" : "Pause"
+    gamePaused = !gamePaused; 
+    pauseBtn.innerHTML = gamePaused ? playSvg : pauseSvg
     if (gamePaused) {
         // Game is paused, so stop the animation loop
         cancelAnimationFrame(animationID);
@@ -51,6 +168,68 @@ pauseBtn.addEventListener('click', () => {
 
     }
 });
+
+
+//adding idea for players health
+
+function PlayerHealth(x,y,color){
+   
+    this.height=10;
+    this.width=10;
+    this.x=x;
+    this.y=y;
+    this.color=color
+
+    this.draw=function (){
+        c.fillStyle=this.color
+        c.fillRect(this.x,this.y,this.width,this.height);
+    }
+    this.update=function (){
+        this.draw();
+    }
+
+}
+//showing health on screen
+let healthArr = [];
+
+function showHealth(){
+
+     const width=10;
+     const height=10;
+     let xPos = canvasWidth - canvasWidth/6;
+     let yPos =   canvasHeight / 8;
+
+     for(let i=0;i<10;i++){
+      let color = i < 3 ? "orange" : "lightgreen"
+      let newHealth=new PlayerHealth((xPos + i * width),yPos,color);
+      healthArr.push(newHealth);
+         
+     }
+
+}
+//button for using medikit
+let mediKit=document.querySelector("#mediKit");
+let healthKitCount =2;
+
+mediKit.addEventListener("click",increaseHP);
+
+function increaseHP(){
+  if(healthKitCount == 0){
+    alert(" You Have Used 2 Medikits !!");
+    return;
+  }
+    if(healthArr.length == 10 ) return;
+
+    if(healthArr.length<10){
+   healthArr = [];
+   showHealth();
+   healthKitCount -- ;
+   mediKit.innerText=`HealthKit(${healthKitCount})`
+
+    }
+
+
+}
 
 //design for backGround 
 
@@ -157,6 +336,18 @@ function showScore() {
 
 // Creating shooting item for player
 
+let gunType = "tank";
+
+let gunTypeBtn =document.querySelector("#gunType")
+
+gunTypeBtn.addEventListener("click" , () =>{
+    //Machine Gun
+
+gunType = gunType == "tank" ? "machineGun" : "tank";
+
+    
+})
+
 function createGun() {
     let xPos = canvasWidth / 2 - 30;
     let yPos = 0;
@@ -165,7 +356,12 @@ function createGun() {
 
     // Load the image
     const image = new Image();
-    image.src = './assets/tank.png';
+    if(gunType == "tank"){
+        image.src = './assets/tank.png';
+    }else{
+        image.src = './assets/machineGun.jpeg';
+    }
+
     const self = this;
 
     this.x = xPos;
@@ -178,18 +374,21 @@ function createGun() {
     };
 
 
-    //to know the logic
-    image.onload = () => {
-        // Draw the image only after it has loaded
-        self.draw();
-    };
+    // //to know the logic
+    // image.onload = () => {
+    //     // Draw the image only after it has loaded
+    //     self.draw();
+    // };
 
-    // Optionally, you can draw the image initially if it's already loaded
     if (image.complete) {
         self.draw();
     }
 }
 
+let handlerArray = [];
+let frame = 0;
+let refreshRate =12
+let refreshCount = 0;
 
 //declaring surviver
 function Charector() {
@@ -199,12 +398,8 @@ function Charector() {
     let yPos = canvasHeight - canvasHeight / 4;
     
     // Declaring gravity
-    const gravity = 0.01; 
+    const gravity = 0.02; 
 
-    // Load the image
-    const image = new Image();
-    image.src = './assets/charecter.png';
-    const self = this;
 
     this.x = xPos;
     this.y = yPos;
@@ -215,13 +410,44 @@ function Charector() {
         y: 0
     };
 
-    image.onload = () => {
-        // Draw the image only after it has loaded
-        self.draw();
-    };
+    this.image = IdleArray[0];
+    this.state = "Idle"
+    this.flipped = false;
 
-    this.draw = function() {
-        c.drawImage(image, self.x, self.y, self.width, self.height);
+
+
+    this.draw = function(image) {
+     if (image && image.complete) {
+                c.save();
+        if (this.flipped) {
+            // Flip the image horizontally
+            c.translate(this.x + this.width / 2, this.y + this.height / 2);
+            c.scale(-1, 1);
+            c.drawImage(image, -this.width / 2, -this.height / 2, this.width, this.height);
+        } else {
+            c.drawImage(image,
+                this.x,
+                this.y,
+                this.width,
+                this.height);
+        }
+        c.restore();
+    }else{
+        c.save();
+        if (this.flipped) {
+            // Flip the image horizontally
+            c.translate(this.x + this.width / 2, this.y + this.height / 2);
+            c.scale(-1, 1);
+            c.drawImage(handlerArray[5], -this.width / 2, -this.height / 2, this.width, this.height);
+        } else {
+            c.drawImage(handlerArray[5],
+                this.x,
+                this.y,
+                this.width,
+                this.height);
+        }
+        c.restore();
+    }
     };
 
     this.update = function() {
@@ -237,7 +463,6 @@ function Charector() {
                 this.y + this.height + this.velocity.y >= block.y
             ) {
                 // Character is on the block
-                this.y = block.y - this.height;
                 this.velocity.y = 0;
                 isOnBlock = true;
                 break;
@@ -249,53 +474,80 @@ function Charector() {
             if (this.y + this.height + this.velocity.y <= canvasHeight) {
                 this.velocity.y += gravity;
                 this.y += this.velocity.y;
-            } else {
+            }
+             else {
                 // If character hits the ground, reset velocity
                 this.y = canvasHeight - this.height;
                 this.velocity.y = 0;
             }
         }
+            if(this.state == "Idle"){
+        handlerArray = IdleArray
+       }else if(this.state == "run"){
+        handlerArray =runArray
+       }else if(this.state == "jump"){
+        handlerArray = jumpArray
+       }
+        refreshCount++;
+        if(refreshCount == refreshRate){
+            frame++;
+            if (frame >= handlerArray.length) {
+                frame = 0;
+            }
+            refreshCount =0
+    
+        }
+
+
+
+
         
-        this.draw();
-    };
+     this.draw(handlerArray[frame]);
+     };
 }
 
 
-const bheem= new Charector();
 
 
 
-//logic for movement of charector
 
-const leftKey =document.querySelector("#leftKey");
-const rightKey =document.querySelector("#rightKey");
-const jumpKey =document.querySelector("#jump");
+//logic for movement
 
 //adding keyBased movment for ease in PC
 document.addEventListener('keydown', handleKeyPressed);
+document.addEventListener('keyup', handleKeyUp);
 let collision;
 
+
+
 function handleKeyPressed(event) {
+// console.log(event.key)
     switch (event.key) {
-      case 'ArrowUp':
-        if(bheem.y + bheem.height < canvasHeight) return;
+      case 'w':
+        if(bheem.velocity.y < 0) return;
+        // if(!onceJump) return;
         bheem.velocity.y = 0;
-        bheem.velocity.y = -2   ;
+        bheem.velocity.y = -2.5 ;
+             bheem.state = "jump"
+             
         break;
-      case 'ArrowLeft':
+      case 'a':
         collision = false
         blockArray.forEach(block => {
-            if((bheem.x - 5 < block.x + block.width && bheem.x > block.x + block.width) &&
+            if((bheem.x - 5 < block.x + block.width && bheem.x + bheem.width > block.x + block.width) &&
             (bheem.y + bheem.height > block.y && bheem.y < block.y + block.height)){
                 collision = true;
                 
             }
         })
         if(!collision   && (bheem.x - 5 > 0)){
-            bheem.x -= 5
+        bheem.state = "run"
+        bheem.flipped= true
+        bheem.x -= 5
+
         }
         break;
-      case 'ArrowRight':
+      case 'd':
         collision = false
         blockArray.forEach(block => {
             if((bheem.x + bheem.width + 5 > block.x && bheem.x < block.x + block.width) &&
@@ -306,9 +558,27 @@ function handleKeyPressed(event) {
         })
     
         if(!collision && (bheem.x + bheem.width + 5 < canvasWidth)){
-            bheem.x += 5
+            bheem.state = "run"
+            bheem.x += 6
         }
         break;
+      default:
+        return;
+    }
+  }
+function handleKeyUp(event) {
+    switch (event.key) {
+      case 'w':
+             bheem.state = "Idle"
+        break;
+      case 'a':
+        bheem.state= "Idle";
+        bheem.flipped=false
+        break;
+      case 'd':
+        bheem.state= "Idle"
+        break;
+
       default:
         return;
     }
@@ -318,47 +588,6 @@ function handleKeyPressed(event) {
 
 
 
-///if played in mobile.. added button fetures also
-
-jumpKey.addEventListener("click",() => {
-
-        if(bheem.y + bheem.height < canvasHeight) return;
-        bheem.velocity.y = 0;
-        bheem.velocity.y = -2   ;
-
-})
-
-rightKey.addEventListener("click" , () => {
-
-    let collision = false
-    blockArray.forEach(block => {
-        if((bheem.x + bheem.width + 5 > block.x && bheem.x < block.x + block.width) &&
-        (bheem.y + bheem.height > block.y && bheem.y < block.y + block.height)){
-            collision = true;
-            
-        }
-    })
-
-    if(!collision){
-        bheem.x += 5
-    }
-
-
-})
-leftKey.addEventListener("click" , () => {
-    let collision = false
-    blockArray.forEach(block => {
-        if((bheem.x - 5 < block.x + block.width && bheem.x > block.x + block.width) &&
-        (bheem.y + bheem.height > block.y && bheem.y < block.y + block.height)){
-            collision = true;
-            
-        }
-    })
-
-    if(!collision){
-        bheem.x -= 5
-    }
-})
 
 
 
@@ -373,8 +602,7 @@ const blockArray=[];
 
 
  
-//declaring particles to add jombie remove effect
-const parcticleArray = [];
+
   
 //adding blocks for barrier
 function Block(x,y,color){
@@ -471,7 +699,8 @@ else{
 
 
 
-
+//declaring particles to add jombie remove effect
+const parcticleArray = [];
 function Particle(x,y,color){
     const gravity=0.01;
     this.x=x;
@@ -515,15 +744,15 @@ function Bullet(direction) {
     let y = canvasHeight / 12 -25; // Adjust y to originate from the top of the gun
     let size = 25;
     let color = "red";
-    let gravity = 0.01;
+    let gravity = 0.015;
 
 
-
+    this.gravity=gravity
     this.x = x;
     this.y = y;
     this.velocity = {
         x: direction === 'left' ? -2.2 : 2.2,
-        y: 0.3
+        y: 0.5
         ,
     };
     this.size = size;
@@ -544,12 +773,26 @@ function Bullet(direction) {
     this.update = function() {
         this.draw();
         // Applying gravity
-        this.velocity.y += gravity;
+        this.velocity.y += this.gravity;
         this.x += this.velocity.x;
         this.y += this.velocity.y;
     };
 }
 
+//adding reload logic
+let bulletShow = document.querySelector("#bulletCount");
+let reLoad = document.querySelector("#reLoad");
+let bulletCount =50
+
+function bulletCountShow(){
+    bulletShow.innerText = `Bullet : ${bulletCount}`
+}
+reLoad.addEventListener("click" , () => {
+    setTimeout(()=>{
+        bulletCount = 50;
+    },2000)
+
+})
 
 // initialising bullet array to keep eye upon bullets
 const bulletArray = [];
@@ -558,45 +801,87 @@ const bulletArray = [];
 
 
 // event listener on the canvas such that bullet will be released according to the side
+
+let RateFire=document.querySelector("#RateFire");
+
+let rateFireFlag = false;
+RateFire.addEventListener("click", ()=>{
+    rateFireFlag = !rateFireFlag;
+    RateFire.innerText = RateFire.innerText == "Fire++" ? "Fire--" : "Fire++"
+})
+
+
 canvas.addEventListener("click", (event) => {
     const clickX = event.clientX;
     let direction = clickX < canvasWidth * (1/3) ? 'left' : clickX >  canvasWidth * (2/3) ? 'right' : null;
     
-    if (direction) { //&& startFlag
+    if (direction && bulletCount > 0) { //&& startFlag
         let newBullet = new Bullet(direction);
+        if(gunType == "machineGun"){
+            newBullet.gravity = 0;
+            newBullet.velocity.y = 5;
+            newBullet.velocity.x= direction == "right" ? 4 : -4
+        }
+        //bullet decrease logic
+       if(bulletCount - 1 <= 0) return; 
+          bulletCount --;
         bulletArray.push(newBullet);
+        if(rateFireFlag){
+
+            setTimeout(()=>{
+                let newBullet = new Bullet(direction);
+                if(gunType == "machineGun"){
+                    newBullet.gravity = 0;
+                    newBullet.velocity.y = 5;
+                    newBullet.velocity.x= direction == "right" ? 4 : -4
+                }
+                //decreasing bullet value
+                if(bulletCount -1 <= 0) return; 
+                bulletCount --;
+                bulletArray.push(newBullet);
+            },100)
+            setTimeout(()=>{
+                let newBullet = new Bullet(direction);
+                if(gunType == "machineGun"){
+                    newBullet.gravity = 0;
+                    newBullet.velocity.y = 5;
+                    newBullet.velocity.x= direction == "right" ? 4 : -4
+                }
+                //bulet decrease
+                if(bulletCount -1 < 0) return; 
+                bulletCount --;
+                bulletArray.push(newBullet);
+            },200)
+ 
+        }
+
     }
+
 });
 
-// Jombie creation
+
+
+// Jombie creation and movement logic
+let dinoHandlerArray = [];
+let dinoFrame = 0;
+let dinoRefreshRate =8
+let dinoRefreshCount = 0;
 function Jombie() {
-
-
-   // Load the image
-   const image = new Image();
-    image.src = './assets/jombie.png';
-    const self = this; 
-
-    // Ensuring the jombie should originate from the start
-    let height = canvas.height / 4 - 20 ;
-    let width = 40;
+    
+    gravity=0.05
+     // Ensuring the jombie should originate from the start
+    let height = canvas.height / 4 - 10 ;
+    let width = 50;
     let x = 0;
     let y = canvas.height - height;
-    let color = "whitesmoke";
-
+    let color = "green";
+    
+    
     this.x = x;
     this.y = y;
    //idea to increase speed with time interval
-   let speedX;
-   if(Score >300){
-    speedX = 1.5
-   }else if(Score > 200){
-    speedX =1
-   } else if(Score >100){
-    speedX=.7
-   }else{
-    speedX=0.5
-   }
+   let speedX = .8;
+
 
 
     this.velocity = {
@@ -606,21 +891,101 @@ function Jombie() {
     this.height = height;
     this.width = width;
     this.color = color;
-    image.onload = function() {
-        // Draw the image only after it has loaded
-        self.draw();
-    };
 
-    this.draw = function() {
-        // c.fillStyle = this.color;
-        // c.fillRect(this.x, this.y, this.width, this.height);
-        c.drawImage(image, self.x, self.y, self.width,self.height);
+
+    // this.image = dinoRunArray[0];
+    this.state = "run"
+    this.flipped = false;
+
+    this.draw = function(image) {
+        if (image && image.complete) {
+            c.save();
+            if (this.flipped) {
+                // Flip the image horizontally
+                c.translate(this.x + this.width / 2, this.y + this.height / 2);
+                c.scale(-1, 1);
+                c.drawImage(image, -this.width / 2, -this.height / 2, this.width, this.height);
+            } else {
+                c.drawImage(image,
+                    this.x,
+                    this.y,
+                    this.width,
+                    this.height);
+            }
+            c.restore();
+        }else{
+            c.save();
+            if (this.flipped) {
+                // Flip the image horizontally
+                c.translate(this.x + this.width / 2, this.y + this.height / 2);
+                c.scale(-1, 1);
+                c.drawImage(dinoRunArray[5], -this.width / 2, -this.height / 2, this.width, this.height);
+            }else{
+                c.drawImage(dinoRunArray[5],
+                    this.x,
+                    this.y,
+                    this.width,
+                    this.height);
+            }
+            c.restore();
+
+        }
     };
 
     this.update = function() {
-        this.draw();
+
+
+        let isOnBlock = false;
+        for (let i = 0; i < blockArray.length; i++) {
+            const block = blockArray[i];
+            
+            // Check if the character is above the block and within the block's width
+            if (
+                this.x < block.x + block.width &&
+                this.x + this.width > block.x &&
+                this.y + this.height <= block.y &&
+                this.y + this.height + this.velocity.y >= block.y
+            ) {
+                // Character is on the block
+                this.y = block.y - this.height;
+                this.velocity.y = 0;
+                isOnBlock = true;
+                break;
+            }
+        }
+        
+        // If not on a block, apply gravity and check for ground collision
+        if (!isOnBlock) {
+            if (this.y + this.height + this.velocity.y <= canvasHeight) {
+                this.velocity.y += gravity;
+                this.y += this.velocity.y;
+            }
+             else {
+                // If character hits the ground, reset velocity
+                this.y = canvasHeight - this.height;
+                this.velocity.y = 0;
+            }
+        }
+
+
+
+        if(this.state == "run"){
+            dinoHandlerArray = dinoRunArray
+           }
+           dinoRefreshCount++;
+           if(dinoRefreshCount == dinoRefreshRate){
+               dinoFrame++;
+               if (dinoFrame >= dinoHandlerArray.length) {
+                   dinoFrame = 0;
+               }   
+               dinoRefreshCount =0
+       
+           }
+
         this.x += this.velocity.x;
         this.y += this.velocity.y;
+
+        this.draw(dinoHandlerArray[frame]);
     };
 }
 
@@ -637,12 +1002,13 @@ function createJombie() {
         if (direction) {
             jombieArray.push(newJombie);
         } else {
+            newJombie.flipped = true
             newJombie.x = canvas.width - newJombie.width;
             newJombie.velocity.x = -newJombie.velocity.x;
             jombieArray.push(newJombie);
         }
     }
-    intervalID=setInterval(start, 4500);
+    intervalID=setInterval(start, 4000);
 } 
 
 
@@ -656,7 +1022,7 @@ function collisionCheckBullet(bullet, jombie, jombieIndex, bulletIndex) {
         bullet.y + bullet.size > jombie.y) {
         // Remove jombie and bullet from their arrays
         for(let i=0 ; i< 20 ; i++){
-            let newParticle = new Particle(bullet.x , bullet.y + bullet.size ,jombie.color)
+            let newParticle = new Particle(jombie.x + jombie.width , jombie.y + jombie.height/2  ,jombie.color)
             parcticleArray.push(newParticle);
         } 
         //updating scoree   
@@ -668,82 +1034,24 @@ function collisionCheckBullet(bullet, jombie, jombieIndex, bulletIndex) {
 }
 function collisionCheckBlock(block, jombie, jombieIndex, blockIndex) {
     // Check if the bullet overlaps with the jombie
-    if ((jombie.x + jombie.width > block.x && jombie.x < block.x + block.width) &&
+    if ((jombie.x + jombie.width + jombie.velocity.x > block.x && jombie.x < block.x + block.width) &&
     (jombie.y + jombie.height > block.y && jombie.y < block.y + block.height)){
-        for(let i=0 ; i< 20 ; i++){
-            let newParticle = new Particle(block.x + block.width/2,block.y + block.height/2 ,block.color)
-            parcticleArray.push(newParticle);
-        }
-        blockArray.splice(blockIndex,1);
+      console.log("entered")
+      jombie.y = block.y - jombie.height;
+      jombie.x =jombie.x;
         
     }
 
 
 }
 
-function moveDownBlock(block, jombie,jombieIndex) {
-   
-    // Check if the jombie is directly below the block
-    if (
-        jombie.x + jombie.width > block.x && // jombie's right edge past block's left edge
-        jombie.x < block.x + block.width && // jombie's left edge before block's right edge
-        jombie.y  > block.y + block.height// jombie's bottom edge just below block's bottom edge
-    ) {
-       
-        checkDownBlock(block,jombieIndex,jombie)
- 
-    }
-}
-//idea to not move the block if one more block is present inside
-function checkDownBlock(block,jombieIndex,jombie) {
-    
-    let moveFlag=false;
-    blockArray.forEach((item) => {
-        if ((item.x + item.width > block.x && 
-            item.x < block.x + block.width && 
-            item.y  > block.y)){
-                moveFlag=true;
-                
-            }
-    })
 
-    if(!moveFlag){
-        for(let i=0 ; i< 20 ; i++){
-            let newParticle = new Particle(jombie.x + jombie.width , jombie.y + 10 ,jombie.color)
-            parcticleArray.push(newParticle);
-        }
-        jombieArray.splice(jombieIndex,1);
-        //updating score
-        jombieCount++;
-        Score +=5;
-        block.velocity.y = 0.1;
-    }
-
-}
-//function to move block down if its in air
-function checkFlyingBlock(block) {
-    
-    let moveFlag=true;
-    blockArray.forEach((item) => {
-        if ((item.x + item.width > block.x && 
-            item.x < block.x + block.width && 
-            item.y  > block.y)){
-                moveFlag=false;
-                
-            }
-    })
-
-    if(moveFlag){
-
-        //giving a velocity to block
-        block.velocity.y = 0.5;
-    }
-
-}
 function checkBelowBheem() {
 
 
     if(bheem.y + bheem.height == canvasHeight) return;
+
+  
     
     let moveFlag=true;
     let opposeBlock;
@@ -757,7 +1065,7 @@ function checkBelowBheem() {
             }
     })
 
-    if(!moveFlag){
+    if(!moveFlag && bheem.y + bheem.height + bheem.velocity.y >= opposeBlock.y){
          bheem.y = opposeBlock.y -bheem.height
     }
 
@@ -785,43 +1093,7 @@ function collisionCheckSurviver(surviver,jombie, jombieIndex) {
 }
 
 
-//adding idea for players health
 
-function PlayerHealth(x,y,color){
-   
-    this.height=10;
-    this.width=10;
-    this.x=x;
-    this.y=y;
-    this.color=color
-
-    this.draw=function (){
-        c.fillStyle=this.color
-        c.fillRect(this.x,this.y,this.width,this.height);
-    }
-    this.update=function (){
-        this.draw();
-    }
-
-}
-//showing health on screen
-const healthArr = [];
-
-function showHealth(){
-
-     const width=10;
-     const height=10;
-     let xPos = canvasWidth - canvasWidth/6;
-     let yPos =   canvasHeight / 8;
-
-     for(let i=0;i<10;i++){
-      let color = i < 3 ? "orange" : "lightgreen"
-      let newHealth=new PlayerHealth((xPos + i * width),yPos,color);
-      healthArr.push(newHealth);
-         
-     }
-
-}
 // Function to draw the health label
 function drawHealthLabel() {
     const labelXPos = canvasWidth - canvasWidth / 6;
@@ -832,12 +1104,30 @@ function drawHealthLabel() {
     c.fillStyle = 'white';
     c.fillText(`Health : ${healthArr.length} / 10 `, labelXPos, labelYPos);
 }
+function checkFlyingBlock(block) {
+    
+    let moveFlag=true;
+    blockArray.forEach((item) => {
+        if ((item.x + item.width > block.x && 
+            item.x < block.x + block.width && 
+            item.y  > block.y)){
+                moveFlag=false;
+                
+            }
+    })
 
+    if(moveFlag){
+
+        //giving a velocity to block
+        block.velocity.y = 0.5;
+    }
+
+}
 
 
 // Animation Loop
 function animate() { 
-
+   
     animationID = requestAnimationFrame(animate);
 
     if (gamePaused) return;
@@ -850,6 +1140,7 @@ function animate() {
     drawHealthLabel();
     showScore()
     checkBelowBheem();
+    bulletCountShow()
     
   
 
@@ -862,6 +1153,10 @@ parcticleArray.forEach((particle , index) => {
     }
 })
 
+
+blockArray.forEach(block => {
+    checkFlyingBlock(block)
+})
        
     bulletArray.forEach((bullet, index) => {
         if (bullet.y > canvas.height) {
@@ -894,12 +1189,7 @@ parcticleArray.forEach((particle , index) => {
    
         })
     })
-    jombieArray.forEach((jombie,jombieIndex) => {
-        blockArray.forEach((block,blockIndex) => {
-        moveDownBlock(block, jombie,jombieIndex)
-   
-        })
-    })
+
 
 //updating current state of bullet and jombie
     bulletArray.forEach((bullet) => {
@@ -915,9 +1205,6 @@ parcticleArray.forEach((particle , index) => {
     })
     //checking if block can move down
 
-    blockArray.forEach(block => {
-        checkFlyingBlock(block);
-    })
 
 //
 healthArr.forEach(health => {
@@ -963,7 +1250,6 @@ function gameOver(){
 }
 
 
-animate();
-showHealth()
+
 
 
