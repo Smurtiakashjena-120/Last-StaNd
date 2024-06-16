@@ -25,7 +25,7 @@ window.onload =()=>{
     canvasDiv.classList.add("unclickble")
 
 }
-
+//while starting the game making visible some divs
 startGame.addEventListener("click" , () => {
     pauseBtn.classList.remove("hidden");
     addBlock.remove()
@@ -39,12 +39,12 @@ pauseBtn.addEventListener('click', () => {
     gamePaused = !gamePaused; // Toggle the gamePaused variable
     pauseBtn.innerText = gamePaused ? "Resume" : "Pause"
     if (gamePaused) {
-        // Game is paused, so stop the animation loop
+        // Game is paused, stop the animation loop
         cancelAnimationFrame(animationID);
         clearInterval(intervalID);
         gameContainer.classList.add("unclickble")
     } else {
-        // Game is resumed, so start the animation loop
+        // game is resumed, so start the animation loop
         animate();
         gameContainer.classList.remove("unclickble")
         createJombie();
@@ -72,7 +72,7 @@ function backGroundDesign(){
     this.height=100
     this.width=130
     image.onload = () => {
-        // Draw the image only after it has loaded
+        // draw the image only after it has loaded
         self.draw();
     };
     c.drawImage(image,0,0, self.width,self.height);
@@ -84,7 +84,7 @@ function backGroundDesign(){
     this.width=100
     cloudimage.onload = () => {
         // Draw the image only after it has loaded
-        self.draw();
+        cloudThis.draw();
     };
     c.drawImage(cloudimage,canvasWidth/4,5, cloudThis.width,cloudThis.height);
     c.drawImage(cloudimage,canvasWidth* (3/5),canvasHeight/5, cloudThis.width,cloudThis.height);
@@ -153,8 +153,6 @@ function showScore() {
 }
 
 
-
-
 // Creating shooting item for player
 
 function createGun() {
@@ -184,7 +182,7 @@ function createGun() {
         self.draw();
     };
 
-    // Optionally, you can draw the image initially if it's already loaded
+    // draw the image initially if it's already loaded
     if (image.complete) {
         self.draw();
     }
