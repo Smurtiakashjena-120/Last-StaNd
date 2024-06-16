@@ -62,3 +62,40 @@ button:hover{
 background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
 
 }
+
+.landingPage{
+    min-height: 95vh;
+    border: 10px solid slateblue;
+}
+
+
+.hedingItem img{
+    height: 50vh;
+    filter: drop-shadow(0.35rem 0.35rem 0.4rem rgba(0, 0, 0, 0.5));
+}
+.hedingItem{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-family:sans-serif;
+    font-size: 30px;
+}
+.heading{
+    color: #684734;
+    font-size: 30px;
+}
+.mode{
+
+    margin-top: 50px;
+  display: flex;
+    justify-content: space-around;
+
+}
+.mode a{
+    background-color:antiquewhite;
+    border: 1px solid black;
+    padding: 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 25px;
+}

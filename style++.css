@@ -1,0 +1,129 @@
+*{
+    margin: 0;
+}
+
+
+body{
+    background-image: linear-gradient(to top, #4fb576 0%, #44c489 30%, #28a9ae 46%, #28a2b7 59%, #4c7788 71%, #6c4f63 86%, #432c39 100%);
+
+}
+
+canvas{
+    border: 2px solid rgb(106, 86, 86);
+    border-bottom: 19px solid rgb(44, 70, 44)  ;
+    background-color: black;
+    
+}
+
+button{
+    margin: 5px;
+
+}
+.startGame{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.unclickble{
+    pointer-events: none;
+}
+
+.hidden {
+    display: none;
+}
+
+
+
+.gameOver{
+    
+    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+    border-radius: 3px;
+    height: 80vh;
+    width: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+  align-items: center;
+    border: 1px solid blue;
+    background-color: #FFFFFF;
+background-image: linear-gradient(180deg, #FFFFFF 0%, #6284FF 50%, #FF0000 100%);
+
+    
+}
+
+.gameOver h2{
+    font-weight: 500;
+    font-family:cursive;
+    font-size:xx-large;
+}
+button{
+    
+    height: 30px;
+padding: 5px;
+border-radius: 3px;
+background-color: #0093E9;
+background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+border: 1px solid blueviolet;
+
+}
+
+button:hover{
+    background-color: #FBAB7E;
+background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+
+}
+
+
+#gunType img{
+    cursor: pointer;
+    border: 1px solid blue;
+  height: 50px;
+  border-radius: 50%;
+  margin: 10px;
+  margin-right: 20px;
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+}
+#reLoad img{
+    cursor: pointer;
+    border: 1px solid blue;
+  height: 50px;
+  border-radius: 50%;
+  margin: 10px;
+  margin-right: 20px;
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+}
+#handlePlay{
+    padding: 1px;
+    margin: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#handlePlay svg {
+    padding: 3px;
+    margin: 1px;
+height: 25px;
+color: white;
+}
+.inventory{
+    height: 23vh;;
+    width: 30vw;
+    border: 2px solid rgb(161, 234, 15);
+    background-color: #FBAB7E;
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    border-radius: 5px;
+}
+#jetPack img{
+    height: 60%;
+    width: 20px;
+}   
+
+.showingSurviver{
+    position: fixed;
+    right: 0vh;
+    bottom:1vh;
+
+}
+#survCam{
+    border: 3px solid blue;
+}

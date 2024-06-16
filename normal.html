@@ -3,24 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Last Stand</title>
-    <link rel="stylesheet" href="styleHacker.css">
+    <title> The Last Stand</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <i>Hacker Mode</i>
+    <div>
 
+    </div>
+    <i>Normal Mode</i>
     <div class="startGame">
-        <p id="bulletCount">
-            Bullet : 100
-        </p>
         <button id="addBlock">Add Block</button>
-        <div id="handlePlay">
-            
-        </div>
-        <button id="mediKit">
-           HealthKit(2)
-        </button>
-        <button id="RateFire">Fire++</button>
+        <button id="handlePlay">Pause</button>
         <button id="startGame">Start Game</button>
     </div>
     <div class="gameContainer">
@@ -29,13 +22,11 @@
         </div>
 
         <div style="display: flex; justify-content: center;">
-            <div id="gunType">
-                <img src="./assets/gunChange.jpg" aria-placeholder="Change">
-            </div>
-            <div id="reLoad">
-            <img src="./assets/reload.jpg" aria-placeholder="reLoad">    
-            </div>
-   </div>
+            <button id="leftKey">Left</button>
+            <button id="jump">Jump</button>
+            <button id="rightKey">Right</button>
+            
+        </div>
     </div>
     <div class="gameOverParent hidden" >
         <div class="gameOver " style="display: flex; justify-content: center; align-items: center;">
@@ -43,6 +34,6 @@
         </div>
     </div>
 
-    <script src="hacker.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

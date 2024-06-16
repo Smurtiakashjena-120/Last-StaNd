@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last Stand</title>
+    <link rel="stylesheet" href="style++.css">
+</head>
+<body>
+    <i style="padding: 10px;">Hacker ++</i>
+
+<div class="showingSurviver">
+    <canvas id="survCam"></canvas>
+</div>
+    <div class="startGame">
+        <button id="autoFire" class="hidden">Auto Fire</button>
+        <p id="bulletCount">
+            Bullet : 100
+        </p>
+        <button id="addBlock">Add Block</button>
+        <div id="handlePlay">
+            
+        </div>
+        <button id="mediKit">
+           HealthKit(2)
+        </button>
+        <button id="RateFire">Fire++</button>
+        <button id="startGame">Start Game</button>
+    </div>
+    <div class="gameContainer">
+        <div class="canvasDiv">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <div style="display: flex; justify-content: center;">
+            <div id="gunType">
+                <img src="./assets/gunChange.jpg" aria-placeholder="Change">
+            </div>
+            <div id="reLoad">
+            <img src="./assets/reload.jpg" aria-placeholder="reLoad">    
+            </div>
+   </div>
+    </div>
+    <div style=" display: flex; justify-content:  center; align-items: center;">
+        <button id="inventoryBtn">Inventory</button>
+        <button id="jetPack"  class="hidden">
+            <img src="./assets/jePack.png">
+        </button>
+    </div>
+
+    <div class="inventory hidden">
+        <div class="attackItems" style="display: flex; justify-items:space-around; align-items: center;">
+
+       <div id="landMine" style="display: flex; flex-direction: column; justify-content: center; align-items: center ; margin: 5px ;  border-radius: 3px    ;">
+        <img src="./assets/landMine.png">
+        <p>landMine</p>
+       </div>
+       <div id="trap" style="display: flex; flex-direction: column; justify-content: center; align-items: center ; margin: 5px ; border-radius: 3px    ;">
+        <img src="./assets/trap.png">
+        <p>Trap</p>
+       </div>
+
+        </div>
+       
+    </div>
+
+
+
+
+
+
+    <div class="gameOverParent hidden" >
+        <div class="gameOver " style="display: flex; justify-content: center; align-items: center;">
+            <h2><i>Game Over</i></h2>
+        </div>
+    </div>
+
+    <script src="hacker++.js"></script>
+</body>
+</html>
