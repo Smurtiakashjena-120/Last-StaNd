@@ -774,9 +774,8 @@ function Bullet(direction) {
     this.x = x;
     this.y = y;
     this.velocity = {
-        x: direction === 'left' ? -2.2 : 2.2,
-        y: 0.5
-        ,
+        x: direction === 'left' ? -2 : 2,
+        y: 0.5,
     };
     this.size = size;
     this.color = color;

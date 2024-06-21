@@ -25,7 +25,7 @@ window.onload =()=>{
     canvasDiv.classList.add("unclickble")
 
 }
-//while starting the game making visible some divs
+
 startGame.addEventListener("click" , () => {
     pauseBtn.classList.remove("hidden");
     addBlock.remove()
@@ -39,12 +39,12 @@ pauseBtn.addEventListener('click', () => {
     gamePaused = !gamePaused; // Toggle the gamePaused variable
     pauseBtn.innerText = gamePaused ? "Resume" : "Pause"
     if (gamePaused) {
-        // Game is paused, stop the animation loop
+        // Game is paused, so stop the animation loop
         cancelAnimationFrame(animationID);
         clearInterval(intervalID);
         gameContainer.classList.add("unclickble")
     } else {
-        // game is resumed, so start the animation loop
+        // Game is resumed, so start the animation loop
         animate();
         gameContainer.classList.remove("unclickble")
         createJombie();
@@ -72,7 +72,7 @@ function backGroundDesign(){
     this.height=100
     this.width=130
     image.onload = () => {
-        // draw the image only after it has loaded
+        // Draw the image only after it has loaded
         self.draw();
     };
     c.drawImage(image,0,0, self.width,self.height);
@@ -84,7 +84,7 @@ function backGroundDesign(){
     this.width=100
     cloudimage.onload = () => {
         // Draw the image only after it has loaded
-        cloudThis.draw();
+        self.draw();
     };
     c.drawImage(cloudimage,canvasWidth/4,5, cloudThis.width,cloudThis.height);
     c.drawImage(cloudimage,canvasWidth* (3/5),canvasHeight/5, cloudThis.width,cloudThis.height);
@@ -153,6 +153,8 @@ function showScore() {
 }
 
 
+
+
 // Creating shooting item for player
 
 function createGun() {
@@ -182,7 +184,7 @@ function createGun() {
         self.draw();
     };
 
-    // draw the image initially if it's already loaded
+    // Optionally, you can draw the image initially if it's already loaded
     if (image.complete) {
         self.draw();
     }
@@ -235,7 +237,7 @@ function Charector() {
                 this.y + this.height + this.velocity.y >= block.y
             ) {
                 // Character is on the block
-                this.y = block.y - this.height;
+                // this.y = block.y - this.height;
                 this.velocity.y = 0;
                 isOnBlock = true;
                 break;
@@ -276,7 +278,7 @@ let collision;
 function handleKeyPressed(event) {
     switch (event.key) {
       case 'ArrowUp':
-        if(bheem.y + bheem.height < canvasHeight) return;
+        if(bheem.velocity.y < 0) return;
         bheem.velocity.y = 0;
         bheem.velocity.y = -2   ;
         break;
@@ -520,8 +522,8 @@ function Bullet(direction) {
     this.x = x;
     this.y = y;
     this.velocity = {
-        x: direction === 'left' ? -2.2 : 2.2,
-        y: 0.3
+        x: direction === 'left' ? -2 : 2,
+        y: 0.5
         ,
     };
     this.size = size;
@@ -755,7 +757,7 @@ function checkBelowBheem() {
             }
     })
 
-    if(!moveFlag){
+    if(!moveFlag && bheem.y + bheem.height + bheem.velocity.y >= opposeBlock.y){
          bheem.y = opposeBlock.y -bheem.height
     }
 
